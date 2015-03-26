@@ -1,12 +1,8 @@
-#Read in raw data file
+#Read in raw data file 
 data <- read.csv("C:/Users/sara.williams/Documents/UM/Analyses/DetectionProbability/UpdatedData_Mar_2015/Whales_0613_FirstSightings.csv")
+
 ######################################################################
-###Already done in Access
-#Only use first sighting
-######This subsetting does not work - ObOrder wrong thing to subset by
-data <- subset(data.tmp,data.tmp$Ob_Order == 1)
-summary(data$distance)
-data <- data[!is.na(data$distance),]
+###First sighting records only already subsetted in Access
 #######################################################################
 
 #View raw data file histogram
@@ -32,8 +28,9 @@ data$distance[which(data$distance<I1)]
 high.out <- data$distance[which(data$distance>I2)]
 min(high.out)
 
-
-#Truncate data by REMOVING HIGH OUTLIERS
+##############################################################################
+#DID NOT USE THIS METHOD
+#Truncate data by REMOVING HIGH OUTLIERS 
 data_trunc_outliers <- subset(data,data$distance < 4154.526)
 summary(data_trunc_outliers$distance)
 
@@ -44,6 +41,7 @@ hist(data_trunc_outliers$distance, breaks=bins_trunc,
      xlim=c(0,4200), ylim=c(0,500), xlab="Distance (m)", cex.main=0.75)
 
 ######OR######################################################################
+
 #Truncate data according to rule of thumb (10% of largest observations)
 percentile90 <- quantile(data$distance, probs=0.90, na.rm=TRUE)
 percentile90
@@ -61,10 +59,6 @@ bins_trunc <- seq(0,5000,by=200)
 hist(data_trunc_90$distance, breaks=bins_trunc, 
      main="First Sighting Distance - Data truncated at 90th Percentile", 
      xlim=c(0,5000), ylim=c(0,400), xlab="Distance (m)", cex.main=0.75)
-
-
-
-
 
 #Subset data
 #Determine which categorical covariates have very few observations and at which levels

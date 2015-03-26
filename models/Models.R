@@ -36,6 +36,7 @@ plot(ds, main="Detection Function using Binned Data")
 #no covariate
 ds<-ds(data = final_data,
               formula= ~1,
+			  truncation=list(left="0%",right="0%"),
               transect="point",
               key="hr",
               adjustment=NULL)
