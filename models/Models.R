@@ -1,15 +1,9 @@
 #Read in raw data file
-#### Possible step: Pool data: sea states 3' and 4' = "rough", visibility poor and poor-fog = "poor".
 library(Distance)
-setwd("C:/Users/sara.williams/Documents/UM/Analyses/DetectionProbability")
-final_data <- read.csv("C:/Users/sara.williams/Documents/UM/Analyses/DetectionProbability/UpdatedData_Mar_2015/final_data.csv")		
 
-
-#######################################
-#If we want to used pooled visbility and sea states use"DetectionData_pool" (csv), 
-#"first_obs_pool" (csv & R) and "newdata_pool" (csv & R)
-
-
+setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
+final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data.csv")		
+	
 #################DETECTION FUNCTION MODELS###############################
 #######################################################################################################
 
@@ -24,21 +18,11 @@ final_data <- read.csv("C:/Users/sara.williams/Documents/UM/Analyses/DetectionPr
    #monotonicity = ifelse(formula == ~1, "strict", "none"),
    #initial.values = NULL)
 
-##########################
+#####################################################
+#Using binned data
 #Create bins
 cutpoints <- c(0,500, 1500, 2500, 3500, 4500)
 bin_data <- create.bins(final_data, cutpoints)
-
-#no covariate
-ds<-ds(data = final_data,
-              formula= ~1,
-              transect="point",
-              key="hr",
-              adjustment=NULL,
-             )
-summary(ds)
-plot(ds, main="Detection Function")
-
 #no covariate --- binned data
 ds<-ds(data = bin_data,
               formula= ~1,
@@ -46,11 +30,23 @@ ds<-ds(data = bin_data,
               key="hr",
               adjustment=NULL)
 summary(ds)
+plot(ds, main="Detection Function using Binned Data")
+#######################################################
+
+#no covariate
+ds<-ds(data = final_data,
+              formula= ~1,
+              transect="point",
+              key="hr",
+              adjustment=NULL)
+summary(ds)
 plot(ds, main="Detection Function")
+
 
 #ship speed
 ds.speed<-ds(data = final_data, 
              formula= ~1+Vessel_Kts,
+			 truncation=list(left="0%",right="0%"),
              transect="point",
              key="hr",
              adjustment=NULL)
@@ -74,8 +70,7 @@ ds.beh<-ds(data = final_data,
            truncation=list(left="0%",right="0%"),
            transect="point",
            key="hr",
-           adjustment=NULL,
-           monotonicity=FALSE)
+           adjustment=NULL)
 summary(ds.beh)
 #plot(ds.beh, main="Detection as Function of Behavior")
 
@@ -85,8 +80,7 @@ ds.sea<-ds(data = final_data,
            truncation=list(left="0%",right="0%"),
            transect="point",
            key="hr",
-           adjustment=NULL,
-           monotonicity=FALSE)
+           adjustment=NULL)
 summary(ds.sea)
 #plot(ds.sea, main="Detection as Function of Sea State")
 
@@ -96,20 +90,19 @@ ds.count<-ds(data = final_data,
              truncation=list(left="0%",right="0%"),
              transect="point",
              key="hr",
-             adjustment=NULL,
-             monotonicity=FALSE)
+             adjustment=NULL)
 summary(ds.count)
 #plot(ds.count, main="Detection as Function of Group Size")
 
-#ship 
-ds.ship<-ds(data = final_data, 
-            formula=~1+Ship,
-            transect="point",
-            key="hr",
-            adjustment=NULL,
-            monotonicity=FALSE)
-summary(ds.ship)
-#plot(ds.ship, main="Detection as Function of Ship")
+# #ship 
+# ds.ship<-ds(data = final_data, 
+            # formula=~1+Ship,
+            # transect="point",
+            # key="hr",
+            # adjustment=NULL,
+            # monotonicity=FALSE)
+# summary(ds.ship)
+# #plot(ds.ship, main="Detection as Function of Ship")
 
 #######################################################################################
 #Interaction models

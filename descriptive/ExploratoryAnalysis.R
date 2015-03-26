@@ -11,37 +11,36 @@ attach(final_data)
 ######################################################################################################
 #Plot number of observations by each level of covariate
 group.counts <- table(Count_)
-
 group.counts
 group.plot <- barplot(group.counts, main="Number of Observations by Group Size", 
-                    xlab="Visibility", ylab="Frequency", 
+                    xlab="Group Size", ylab="Frequency", 
                     ylim=c(0, 2500), cex.main=0.75)
 
 vis.counts <- table(Visibility)
 vis.counts
-vis.plot <- barplot(vis.counts, main="Number of Observations by Visbility", 
+vis.plot <- barplot(vis.counts, main="Number of Observations by Visibility", 
                     xlab="Visibility", ylab="Frequency", 
                     ylim=c(0, 2500), cex.main=0.75)
 
 beh.counts <- table(Behavior)
 beh.counts
 beh.plot <- barplot(beh.counts, main="Number of Observations by Behavior", xlab="Behavior", ylab="Frequency",
-                    ylim=c(0, 1500), cex.main=0.75)
-
-obs.counts <- table(Observer)
-obs.counts
-obs.plot <- barplot(obs.counts, main="Number of Observations by Observer", xlab="Observer", ylab="Frequency",
-                    ylim=c(0, 2000), )
+                    ylim=c(0, 2500), cex.main=0.75)
 
 sea.counts <- table(SeaState)
 sea.counts
 sea.plot <- barplot(sea.counts, main="Number of Observations by Sea State", xlab="Sea State", ylab="Frequency",
-                   ylim=c(0, 2000))
+                   ylim=c(0, 2500))
 
 # subarea.counts <- table(Subarea)
 # subarea.counts
 # subarea.plot <- barplot(subarea.counts, main="Number of Observations by Subarea", xlab="Subarea", ylab="Frequency",
                    # ylim=c(0, 2000))
+
+# obs.counts <- table(Observer)
+# obs.counts
+# obs.plot <- barplot(obs.counts, main="Number of Observations by Observer", xlab="Observer", ylab="Frequency",
+                    # ylim=c(0, 2000), )
 
 
 ####################################################################################################
