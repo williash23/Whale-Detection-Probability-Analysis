@@ -2,9 +2,12 @@
 setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
 final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data.csv")		
 
-
+#################
+#Not binned data
 attach(final_data)
-
+#################
+#Binned Data
+attach(bin_data)
 ####################################################################################################
 #Exploratory Analysis
 

@@ -21,8 +21,9 @@ final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionP
 #####################################################
 #Using binned data
 #Create bins
-cutpoints <- c(0,500, 1500, 2500, 3500, 4500)
+cutpoints <- c(0,500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000)
 bin_data <- create.bins(final_data, cutpoints)
+
 #no covariate --- binned data
 ds<-ds(data = bin_data,
               formula= ~1,
@@ -31,8 +32,55 @@ ds<-ds(data = bin_data,
               adjustment=NULL)
 summary(ds)
 plot(ds, main="Detection Function using Binned Data")
+
+#ship speed
+ds.speed<-ds(data = bin_data, 
+             formula= ~1+Vessel_Kts,
+			 transect="point",
+             key="hr",
+             adjustment=NULL)
+summary(ds.speed)
+#plot(ds.speed, main="Detection as Function of Ship Speed")
+
+#Visibility
+ds.vis<-ds(data = bin_data, 
+           formula= ~1+Visibility,
+           transect="point",
+           key="hr",
+           adjustment=NULL)
+summary(ds.vis)
+#plot(ds.vis, main="Detection as Function of Visibility")
+
+#Behavior
+ds.beh<-ds(data = bin_data, 
+           formula= ~1+Behavior,
+           transect="point",
+           key="hr",
+           adjustment=NULL)
+summary(ds.beh)
+#plot(ds.beh, main="Detection as Function of Behavior")
+
+#sea State
+ds.sea<-ds(data = bin_data, 
+           formula= ~1+SeaState,
+           transect="point",
+           key="hr",
+           adjustment=NULL)
+summary(ds.sea)
+#plot(ds.sea, main="Detection as Function of Sea State")
+
+#Group size - Count is integer
+ds.count<-ds(data = bin_data, 
+             formula= ~1+Count_,
+             transect="point",
+             key="hr",
+             adjustment=NULL)
+summary(ds.count)
+#plot(ds.count, main="Detection as Function of Group Size")
+
 #######################################################
 
+###Using not binned data
 #no covariate
 ds<-ds(data = final_data,
               formula= ~1,
@@ -41,7 +89,7 @@ ds<-ds(data = final_data,
               key="hr",
               adjustment=NULL)
 summary(ds)
-plot(ds, main="Detection Function")
+#plot(ds, main="Detection Function")
 
 
 #ship speed
@@ -62,8 +110,7 @@ ds.vis<-ds(data = final_data,
            key="hr",
            adjustment=NULL)
 summary(ds.vis)
-#plot(ds.vis, main="Detection as Function of Visibility", 
-     cex.lab = 0.75, cex.main = 1, cex.axis=0.75, font.lab=2)
+#plot(ds.vis, main="Detection as Function of Visibility")
 
 #Behavior
 ds.beh<-ds(data = final_data, 
