@@ -1,19 +1,14 @@
 #Load and attach data
 setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
-final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data.csv")		
 
-#################
-#Not binned data
-attach(final_data)
-#################
 #Binned Data
+bin_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/bin_data.csv")		
 attach(bin_data)
-####################################################################################################
+
 #Exploratory Analysis
 
-######################################################################################################
 #Plot number of observations by each level of covariate
-group.counts <- table(Count_)
+group.counts <- table(Count)
 group.counts
 group.plot <- barplot(group.counts, main="Number of Observations by Group Size", 
                     xlab="Group Size", ylab="Frequency", 
@@ -68,12 +63,7 @@ boxplot(distance~SeaState,data=final_data, main="First Sighting Distance by Sea 
         xlab="Sea State", ylab="Distance (m)")
 
 #Group Size
-plot(Count_, distance, main="First Sighting Distance by Group Size", 
-     xlab="Group Size", ylab="Distance (m)")
-abline(lm(distance~Count_), col="red")
-summary(lm(distance~Count_))
-
-boxplot(distance~Count_,data=final_data, main="First Sighting Distance by Group Size", 
+boxplot(distance~Count,data=final_data, main="First Sighting Distance by Group Size", 
         xlab="Group Size", ylab="Distance (m)")
 
 
@@ -102,7 +92,3 @@ boxplot(distance~Count_,data=final_data, main="First Sighting Distance by Group 
 # boxplot(distance~Subarea,data=final_data, main="First Sighting Distance by Subarea", 
         # xlab="Subarea", ylab="Distance (m)")
 
-
-
-
-####################################################################################################

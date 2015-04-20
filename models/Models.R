@@ -1,10 +1,8 @@
 #Read in raw data file
 library(Distance)
-
 setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
-final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data.csv")		
-	
-#################DETECTION FUNCTION MODELS###############################
+
+#################DETECTION FUNCTION MODELS#############################################################
 #######################################################################################################
 
 #no covariates code example
@@ -18,11 +16,9 @@ final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionP
    #monotonicity = ifelse(formula == ~1, "strict", "none"),
    #initial.values = NULL)
 
-#####################################################
+########################################################################################################
 #Using binned data
-#Create bins
-cutpoints <- c(0,500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000)
-bin_data <- create.bins(final_data, cutpoints)
+bin_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/bin_data.csv")
 
 #no covariate --- binned data
 ds<-ds(data = bin_data,
@@ -35,12 +31,12 @@ plot(ds, main="Detection Function using Binned Data")
 
 #ship speed
 ds.speed<-ds(data = bin_data, 
-             formula= ~1+Vessel_Kts,
-			 transect="point",
-             key="hr",
-             adjustment=NULL)
+             # formula= ~1+Kts_scaled,
+			 # transect="point",
+             # key="hr",
+             # adjustment=NULL)
 summary(ds.speed)
-#plot(ds.speed, main="Detection as Function of Ship Speed")
+plot(ds.speed, main="Detection as Function of Ship Speed")
 
 #Visibility
 ds.vis<-ds(data = bin_data, 
@@ -71,31 +67,39 @@ summary(ds.sea)
 
 #Group size - Count is integer
 ds.count<-ds(data = bin_data, 
-             formula= ~1+Count_,
+             formula= ~1+Count,
              transect="point",
              key="hr",
              adjustment=NULL)
 summary(ds.count)
 #plot(ds.count, main="Detection as Function of Group Size")
 
-#######################################################
+#All covariates with binned data and scaled ship speed
+ds.all<-ds(data = bin_data, 
+             formula= ~1+Kts_scaled+Count+Behavior+SeaState+Visibility,
+			 transect="point",
+             key="hr",
+             adjustment=NULL)
+summary(ds.all)
 
+########################################################################################################
+########################################################################################################
+########################################################################################################
 ###Using not binned data
+final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data.csv")		
+	
 #no covariate
 ds<-ds(data = final_data,
               formula= ~1,
-			  truncation=list(left="0%",right="0%"),
-              transect="point",
+			  transect="point",
               key="hr",
               adjustment=NULL)
 summary(ds)
 #plot(ds, main="Detection Function")
 
-
 #ship speed
 ds.speed<-ds(data = final_data, 
-             formula= ~1+Vessel_Kts,
-			 truncation=list(left="0%",right="0%"),
+             formula= ~1+Kts_scaled,
              transect="point",
              key="hr",
              adjustment=NULL)
@@ -105,7 +109,6 @@ summary(ds.speed)
 #Visibility
 ds.vis<-ds(data = final_data, 
            formula= ~1+Visibility,
-           truncation=list(left="0%",right="0%"),
            transect="point",
            key="hr",
            adjustment=NULL)
@@ -115,7 +118,6 @@ summary(ds.vis)
 #Behavior
 ds.beh<-ds(data = final_data, 
            formula= ~1+Behavior,
-           truncation=list(left="0%",right="0%"),
            transect="point",
            key="hr",
            adjustment=NULL)
@@ -125,7 +127,6 @@ summary(ds.beh)
 #sea State
 ds.sea<-ds(data = final_data, 
            formula= ~1+SeaState,
-           truncation=list(left="0%",right="0%"),
            transect="point",
            key="hr",
            adjustment=NULL)
@@ -134,8 +135,7 @@ summary(ds.sea)
 
 #Group size - Count is integer
 ds.count<-ds(data = final_data, 
-             formula= ~1+Count_,
-             truncation=list(left="0%",right="0%"),
+             formula= ~1+Count,
              transect="point",
              key="hr",
              adjustment=NULL)
@@ -147,68 +147,7 @@ summary(ds.count)
             # formula=~1+Ship,
             # transect="point",
             # key="hr",
-            # adjustment=NULL,
-            # monotonicity=FALSE)
+            # adjustment=NULL)
 # summary(ds.ship)
 # #plot(ds.ship, main="Detection as Function of Ship")
 
-#######################################################################################
-#Interaction models
-
-#All
-ds.2<-ds(data = final_data, 
-         formula= ~1+SeaState + Visibility,
-         transect="point",
-         key="hr",
-         adjustment=NULL,
-         monotonicity=FALSE)
-summary(ds.2)
-
-ds.3<-ds(data = final_data, 
-               formula= ~1+SeaState + Visibility + Behavior,
-               transect="point",
-               key="hr",
-               adjustment=NULL,
-               monotonicity=FALSE)
-summary(ds.3)
-
-ds.4<-ds(data = final_data, 
-         formula= ~1+SeaState + Visibility + Behavior + Count_,
-         transect="point",
-         key="hr",
-         adjustment=NULL,
-         monotonicity=FALSE)
-summary(ds.4)
-
-plot(ds.4, main="Detection as Function of All Covariates")
-
-#Visibility*Behavior
-ds.vis.beh<-ds(data = data, 
-               formula= ~1+Behavior*Visibility,
-               truncation=list(left="0%",right="0%"),
-               transect="point",
-               key="hr",
-               adjustment="cos")
-summary(ds.vis.beh)
-plot(ds.vis.beh, main="Detection as Function of Visibility-Behavior Interaction")
-
-
-#Visibility*Group Size
-ds.vis.count<-ds(data = data, 
-                 formula= ~1+Count*Visibility,
-                 truncation=list(left="0%",right="0%"),
-                 transect="point",
-                 key="hr",
-                 adjustment="cos")
-summary(ds.vis.count)
-plot(ds.vis.count, main="Detection as Function of Visibility-Group size Interaction")
-
-#Group size*Behavior
-ds.count.beh<-ds(data = data, 
-                 formula= ~1+Count*Behavior,
-                 truncation=list(left="0%",right="0%"),
-                 transect="point",
-                 key="hr",
-                 adjustment="cos")
-summary(ds.count.beh)
-plot(ds.count.beh, main="Detection as Function of Group size-Behavior Interaction")
