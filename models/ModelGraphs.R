@@ -2,7 +2,11 @@
 library(Distance)
 setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
 
-final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data_14.csv")
+#Using binned data
+final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data_14_CountPooled.csv")
+cutpoints<-c(0,500,1000,1500,2000,2500,3000,3500,4000,4500,5000)
+bin_data<-create.bins(final_data, cutpoints)
+bin_data$Count <- factor(bin_data$Count, levels = c("1", "2 to 3", "large"))
 
 #Histogram
 bins <- seq(0,5000,by=500)
@@ -89,10 +93,13 @@ hr.cov.sa <- function(x, scale = exp(7.225), shape = exp(0.907)){
 #All cov
 hr <- function(x, scale = exp(6.870), shape = exp(0.964)){
   1 - exp(-(x/scale)^(-shape))
-}
-hr.cov <- function(x, scale = exp(8.026), shape = exp(0.965)){
+}# Most common scenario: 1 whale, blow, excellent
+hr.cov <- function(x, scale = exp(8.026), shape = exp(0.964)){
   1 - exp(-(x/scale)^(-shape)) 
-}
+}# Best case scenario: 4+ whales, surface active, excellent
+hr.cov.2 <- function(x, scale = exp(5.701), shape = exp(0.964)){
+  1 - exp(-(x/scale)^(-shape)) 
+}# Worst case scenario: 1 whale, blow, poor-fog
 
 ##############################################################################
 #Plots
@@ -113,19 +120,47 @@ segments(1000, a, 1000, 0, col= "black" ,lty=1, lwd = 1.5)
 segments(0, a, 1000, a, col= "black" ,lty=1, lwd = 1.5)	 
 	
 #Add in line for covariate
-lines(x, hr.cov.2(x), col = "black", lwd = 2, lty = 2)
-lines(x, hr.cov.3(x), col = "black", lwd = 2, lty = 3)
+lines(x, hr.cov(x), col = "black", lwd = 2, lty = 2)
+lines(x, hr.cov.2(x), col = "black", lwd = 2, lty = 3)
 
 #Adding 1000m lines for covariate
-b <- hr.cov.2(1000)
+b <- hr.cov(1000)
 segments(1000, b, 1000, 0, col= "black" ,lty=1, lwd = 1.5)
 segments(0, b, 1000, b, col= "black" ,lty=1, lwd = 1.5)	 
 
-c <- hr.cov.3(1000)
+c <- hr.cov.2(1000)
 segments(1000, c, 1000, 0, col= "black" ,lty=1, lwd = 1.5)
 segments(0, c, 1000, c, col= "black" ,lty=1, lwd = 1.5)	 
 	 
 	 
+# Plot 60% detection comparison of scenarios
+plot(sort(x), hr(x), xlim=c(-10,5000),
+	 axes=F,
+     main=NULL, cex.main = 1, 
+     cex.lab = 1, cex.axis=1, xlab="Distance (m)", ylab="P(detection)", 
+     ylim = c(0, 1.0), col = "black", lwd = 2, type = "l", 
+     frame.plot = F)
+axis(1, pos=0)
+axis(2, pos=0)
+
+#Adding 1000m lines for null
+a <- hr(1000)
+segments(1000, a, 1000, 0, col= "black" ,lty=1, lwd = 1.5)
+#segments(0, a, 1000, a, col= "black" ,lty=1, lwd = 1.5)	 
+	
+#Add in line for covariate
+lines(x, hr.cov(x), col = "black", lwd = 2, lty = 2)
+lines(x, hr.cov.2(x), col = "black", lwd = 2, lty = 3)
+
+#Adding 1000m lines for covariate
+b <- hr.cov(3170)
+segments(3170, b, 3170, 0, col= "black" ,lty=1, lwd = 1.5)
+segments(0, b, 3170, b, col= "black" ,lty=1, lwd = 1.5)	 
+
+c <- hr.cov.2(310)
+segments(310, c, 310, 0, col= "black" ,lty=1, lwd = 1.5)
+#segments(0, c, 310, c, col= "black" ,lty=1, lwd = 1.5)	 
+	 	
 	 
 	 
 	 
