@@ -1,6 +1,7 @@
 #Read in raw data file
 library(Distance)
-setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
+library(dplyr)
+setwd("C:/Users/sara.williams/Documents/GitHub/Whale-Detection-Probability-Analysis/")
 
 #################DETECTION FUNCTION MODELS#############################################################
 #######################################################################################################
@@ -18,12 +19,13 @@ setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
 
 ########################################################################################################
 #Using binned data
-final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/final_data_14_CountPooled.csv")
+final_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale-Detection-Probability-Analysis/data/final_data_14_CountPooled.csv")
 cutpoints<-c(0,500,1000,1500,2000,2500,3000,3500,4000,4500,5000)
 bin_data<-create.bins(final_data, cutpoints)
 bin_data$Count <- factor(bin_data$Count, levels = c("1", "2 to 3", "large"))
 
-#no covariate --- binned data
+#  Older Distance package ("Distance")
+#   no covariate --- binned data
 ds<-ds(data = bin_data,
               formula= ~1,
               transect="point",
@@ -31,6 +33,7 @@ ds<-ds(data = bin_data,
               adjustment=NULL)
 summary(ds)
 #plot(ds, main="Detection Function using Binned Data")
+
 
 # #ship speed
 # ds.speed<-ds(data = bin_data, 
@@ -84,6 +87,10 @@ ds.all<-ds(data = bin_data,
              key="hr",
              adjustment=NULL)
 summary(ds.all)
+########################################################################################################
+
+#  Generate smaple.table, region.table, obs.table for abundance estimation per grid cell.
+#   This abundance estimate will be used as a response variable for density of sightings within the study area.
 
 ########################################################################################################
 ########################################################################################################
@@ -153,4 +160,20 @@ summary(ds.count)
             # adjustment=NULL)
 # summary(ds.ship)
 # #plot(ds.ship, main="Detection as Function of Ship")
+########################################################################################################
 
+# # # #  Newer Distance package ("Rdistance")
+# # # #   no covariate --- binned data
+# # # library(Rdistance)
+# # # dat <- final_data
+# # # colnames(dat)[5] <- "dist"
+
+# # # dfunc <-F.dfunc.estim(dat, "hazrate")
+
+# # # transect <- select(dat, X)
+# # # transect <- mutate(transect, length = 1397)
+# # # colnames(dat)[1] <- "siteID"
+# # # colnames(dat)[3] <- "groupsize"
+# # # colnames(transect)[1] <- "siteID"
+
+# # # abund <- F.abund.estim(dfunc, detection.data = dat, transect.data = transect, area=1, by.id = TRUE)
