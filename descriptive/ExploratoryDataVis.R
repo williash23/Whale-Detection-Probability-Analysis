@@ -1,35 +1,47 @@
-#Load and attach data
-setwd("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability")
+# Sara Williams
+# 11/18/2015
+# Detection probability analysis - exploratoty data visualization.
+################################################################################
 
-#Binned Data
-bin_data <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale_DetectionProbability/data/bin_data.csv")		
-attach(bin_data)
+#  Load packages
+library(Distance)
+library(dplyr)
+library(ggplot2)
+library(car)
 
-#Exploratory Analysis
+#Load and truncate data to 85th percentile
+final_dat <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale-Detection-Probability-Analysis/data/final_dat_2015.csv")
+
+percentile85 <- quantile(final_dat$distance, probs=0.85, na.rm=TRUE)
+percentile85
+final_dat_truncated85 <- final_dat[final_dat$distance < 4565,]
 
 #Plot number of observations by each level of covariate
-group.counts <- table(Count)
+group.counts <- table(final_dat_truncated85$count_factor)
 group.counts
 group.plot <- barplot(group.counts, main="Number of Observations by Group Size", 
                     xlab="Group Size", ylab="Frequency", 
                     ylim=c(0, 2500), cex.main=0.75)
 
-vis.counts <- table(Visibility)
+vis.counts <- table(final_dat_truncated85$visibility)
 vis.counts
 vis.plot <- barplot(vis.counts, main="Number of Observations by Visibility", 
                     xlab="Visibility", ylab="Frequency", 
                     ylim=c(0, 2500), cex.main=0.75)
 
-beh.counts <- table(Behavior)
+beh.counts <- table(final_dat_truncated85$whale_behavior)
 beh.counts
 beh.plot <- barplot(beh.counts, main="Number of Observations by Behavior", xlab="Behavior", ylab="Frequency",
                     ylim=c(0, 2500), cex.main=0.75)
 
-sea.counts <- table(SeaState)
-sea.counts
+waves.counts <- table(final_dat_truncated85$waves)
+waves.counts
 sea.plot <- barplot(sea.counts, main="Number of Observations by Sea State", xlab="Sea State", ylab="Frequency",
                    ylim=c(0, 2500))
 
+chisq.test(group.counts, vis.counts)
+				   
+				   
 # subarea.counts <- table(Subarea)
 # subarea.counts
 # subarea.plot <- barplot(subarea.counts, main="Number of Observations by Subarea", xlab="Subarea", ylab="Frequency",
@@ -45,28 +57,34 @@ sea.plot <- barplot(sea.counts, main="Number of Observations by Sea State", xlab
 #Plot distance as a function of each level of covariate
 
 #Ship Speed
-plot(Vessel_Kts, distance, main="First Sighting Distance by Ship Speed", 
+plot(final_dat_truncated85$ship_speed_scaled, final_dat_truncated85$distance, main="First Sighting Distance by Ship Speed", 
      xlab="Ship Speed", ylab="Distance (m)")
-abline(lm(distance~Vessel_Kts), col="red")
-summary(lm(distance~Vessel_Kts))
+abline(lm(final_dat_truncated85$distance~final_dat_truncated85$ship_speed_scaled), col="red")
+summary(lm(final_dat_truncated85$distance~final_dat_truncated85$ship_speed_scaled))
 
 #Visibility
-boxplot(distance~Visibility,data=final_data, main="First Sighting Distance by Visibility", 
+boxplot(distance~visibility,data=final_dat_truncated85, main="First Sighting Distance by Visibility", 
         xlab="Visbility", ylab="Distance (m)")
 
 #Behavior
-boxplot(distance~Behavior,data=final_data, main="First Sighting Distance by Behavior", 
+boxplot(distance~whale_behavior,data=final_dat_truncated85, main="First Sighting Distance by Behavior", 
         xlab="Behavior", ylab="Distance (m)")
 
 #Sea State
-boxplot(distance~SeaState,data=final_data, main="First Sighting Distance by Sea State", 
-        xlab="Sea State", ylab="Distance (m)")
+boxplot(distance~waves,data=final_dat_truncated85, main="First Sighting Distance by Sea State", 
+        xlab="Wave height", ylab="Distance (m)")
 
 #Group Size
-boxplot(distance~Count,data=final_data, main="First Sighting Distance by Group Size", 
+boxplot(distance~count_factor,data=final_dat_truncated85, main="First Sighting Distance by Group Size", 
         xlab="Group Size", ylab="Distance (m)")
 
 
+		
+		
+		
+		
+		
+		
 # #Azimuth
 # plot(BB_MM_Azi, distance, main="First Sighting Distance by Azimuth to Whale", 
      # xlab="Azimuth from Bulbous Bow to  Whale", ylab="Distance (m)")

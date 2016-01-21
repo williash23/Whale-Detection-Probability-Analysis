@@ -1,0 +1,12 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="2">
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="866" startPos="1357" endPos="1357" selMode="0" lang="R" encoding="-1" filename="C:\Users\sara.williams\Documents\GitHub\Whale-Detection-Probability-Analysis\DataCleaning.R" backupFilePath="" originalFileLastModifTimestamp="1452706942" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="803" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\sara.williams\Documents\GitHub\Whale-Detection-Probability-Analysis\descriptive\ExploratoryAnalysis.R" backupFilePath="" originalFileLastModifTimestamp="1452557438" />
+            <File firstVisibleLine="24" xOffset="0" scrollWidth="817" startPos="2332" endPos="2332" selMode="0" lang="R" encoding="-1" filename="C:\Users\sara.williams\Documents\GitHub\Whale-Detection-Probability-Analysis\Estimation_bias.R" backupFilePath="" originalFileLastModifTimestamp="1452546928" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="803" startPos="0" endPos="0" selMode="0" lang="R" encoding="-1" filename="C:\Users\sara.williams\Documents\GitHub\Whale-Detection-Probability-Analysis\models\Models.R" backupFilePath="" originalFileLastModifTimestamp="1452718681" />
+            <File firstVisibleLine="195" xOffset="0" scrollWidth="546" startPos="7849" endPos="7849" selMode="0" lang="R" encoding="-1" filename="C:\Users\sara.williams\Documents\GitHub\Whale-Detection-Probability-Analysis\models\Plots.R" backupFilePath="" originalFileLastModifTimestamp="1452720755" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>
