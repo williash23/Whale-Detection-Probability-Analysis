@@ -9,7 +9,7 @@ library(dplyr)
 
 #  Read in final data set. NOTE that 85th percentil trucation is done WITHIN the ds() function, 
 #   so we do NOT use final_dat_truncated85
-final_dat <- read.csv("C:/Users/sara.williams/Documents/GitHub/Whale-Detection-Probability-Analysis/data/final_dat_2015.csv")
+final_dat <- read.csv("C:/Users/saraw/Documents/Whales/final_dat_2015.csv")
 
 #  Example model call
 #no covariates code example
